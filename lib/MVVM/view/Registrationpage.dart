@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Loginpage extends StatefulWidget {
-  const Loginpage({super.key});
+class Registrationpage extends StatefulWidget {
+  const Registrationpage({super.key});
 
   @override
-  State<Loginpage> createState() => _LoginpageState();
+  State<Registrationpage> createState() => _RegistrationpageState();
 }
 
-class _LoginpageState extends State<Loginpage> {
+class _RegistrationpageState extends State<Registrationpage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -89,9 +89,9 @@ class _LoginpageState extends State<Loginpage> {
                 children: [
                   Positioned(
                     top: screenHeight * 0.15,
-                    left: screenWidth * 0.18,
+                    left: screenWidth * 0.20,
                     child: const Text(
-                      "Welcome Back!",
+                      "Register Now",
                       style: TextStyle(
                         fontSize: 30,
                         color: Colors.black,
@@ -99,10 +99,34 @@ class _LoginpageState extends State<Loginpage> {
                       ),
                     ),
                   ),
-          
-                  // Email input
+                   
+                    // username
                   Positioned(
                     top: screenHeight * 0.33,
+                    left: screenWidth * 0.14,
+                    child: SizedBox(
+                      width: screenWidth * 0.25,
+                      child: Material(
+                        elevation: 4,
+                        borderRadius: BorderRadius.circular(20),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: " Username",
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Color.fromARGB(255, 202, 202, 202)),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Email input
+                  Positioned(
+                    top: screenHeight * 0.42,
                     left: screenWidth * 0.14,
                     child: SizedBox(
                       width: screenWidth * 0.25,
@@ -124,9 +148,9 @@ class _LoginpageState extends State<Loginpage> {
                     ),
                   ),
           
-                  // password input
+                   // password input
                   Positioned(
-                    top: screenHeight * 0.42,
+                    top: screenHeight * 0.51,
                     left: screenWidth * 0.14,
                     child: SizedBox(
                       width: screenWidth * 0.25,
@@ -148,19 +172,9 @@ class _LoginpageState extends State<Loginpage> {
                     ),
                   ),
                   
-                  Positioned(
-                    top: screenHeight * 0.49,
-                    left: screenWidth * 0.29,
-                    child: TextButton(
-                      onPressed: () {  }, 
-                      child: Text("Forget Password",
-                    style: TextStyle(fontSize: 18,
-                    color: const Color.fromARGB(255, 24, 128, 27),
-                    fontWeight: FontWeight.bold)),),
-                  ),
                   // Login Button
                   Positioned(
-                    top: screenHeight * 0.55,
+                    top: screenHeight * 0.65,
                     left: screenWidth * 0.14,
                     child: Material(
                       elevation: 4,
@@ -178,7 +192,7 @@ class _LoginpageState extends State<Loginpage> {
                           ),
                           child: const Center(
                             child: Text(
-                              "Login Now",
+                              "Sign Up",
                               style: TextStyle(
                                 fontSize: 17,
                                 color: Colors.white,
@@ -190,71 +204,6 @@ class _LoginpageState extends State<Loginpage> {
                       ),
                     ),
                   ),
-          
-                  // sign in
-                  Positioned(
-                    top: screenHeight * 0.64,
-                    left: screenWidth * 0.14,
-                    child: Material(
-                      elevation: 4,
-                      borderRadius: BorderRadius.circular(15),
-                      child: GestureDetector(
-                        onTap: (){
-          
-                        },
-                        child: Container(
-                          height: 46,
-                          width: screenWidth * 0.25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 100),
-                              child: Row(
-                                children: [
-                                  Image.asset("assets/google_logo.png",scale: 14,),
-                                  SizedBox(width: 10,),
-                                  const Text(
-                                    "Login with Google",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                // sign up button
-                 Positioned(
-                  top: screenHeight * 0.72,
-                  left: screenWidth * 0.18,
-                   child: Row(
-                     children: [
-                      Text("Don't have an account?",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16),),
-                      TextButton(
-                        onPressed: (){
-                                  
-                         },
-                        child: Text("Sign Up Now",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),)),
-                       ],
-                     ),
-                 ),
                 ],
               ),
             ),

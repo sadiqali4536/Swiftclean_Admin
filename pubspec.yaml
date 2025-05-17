@@ -1,5 +1,5 @@
 name: swiftclean_admin
-description: "A new Flutter project."
+description: A new Flutter project.
 
 # Prevent publishing to pub.dev
 publish_to: 'none'
@@ -24,7 +24,7 @@ dependencies:
   provider: ^6.1.2
 
   # Networking
-  http: ^1.2.1
+  http: ^1.4.0
 
   # Local storage
   shared_preferences: ^2.2.2
@@ -32,10 +32,11 @@ dependencies:
   # Notifications
   fluttertoast: ^8.2.4
 
-  # Optional (if using Firebase later)
-  # firebase_core: ^2.30.0
-  # firebase_auth: ^4.16.0
-  # cloud_firestore: ^4.14.0
+  # Navigation drawer
+  flutter_slider_drawer: ^3.0.2
+  standard_searchbar: ^2.1.1
+  fl_chart: ^0.71.0
+  syncfusion_flutter_charts: ^29.1.38
 
 dev_dependencies:
   flutter_test:
@@ -47,14 +48,13 @@ flutter:
 
   assets:
     - assets/
-    # Add your specific images/folders here if needed
-    # - assets/images/
-    # - assets/icons/
+    - assets/image/
+    - assets/icon/
 
-  # Optional: Add custom fonts here
+  # Optional: Add custom fonts if needed
   # fonts:
-  #   - family: Roboto
+  #   - family: Poppins
   #     fonts:
-  #       - asset: assets/fonts/Roboto-Regular.ttf
-  #       - asset: assets/fonts/Roboto-Bold.ttf
+  #       - asset: assets/fonts/Poppins-Regular.ttf
+  #       - asset: assets/fonts/Poppins-Bold.ttf
   #         weight: 700
