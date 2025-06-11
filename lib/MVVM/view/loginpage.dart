@@ -1,4 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:swiftclean_admin/MVVM/Responsive/responsive_layput.dart';
+import 'package:swiftclean_admin/MVVM/view/Dashboard/desktop_scaffold.dart';
+import 'package:swiftclean_admin/MVVM/view/Dashboard/mobile_scaffold.dart';
+import 'package:swiftclean_admin/MVVM/view/Dashboard/tablet_scaffold.dart';
+import 'package:swiftclean_admin/MVVM/view/pages.dart/Dashboard/Dashboard.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -8,269 +14,367 @@ class Loginpage extends StatefulWidget {
 }
 
 class _LoginpageState extends State<Loginpage> {
+  String? adminEmail = "swiftcleanaccount@gmail.com";
+  final passController = TextEditingController();
+
+  bool isLoading = false;
+  bool _isObscureCurrent = true;
+
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = constraints.maxWidth;
+        final screenHeight = constraints.maxHeight;
 
+        if (screenWidth >= 1024) {
+          // Desktop layout
+          return _buildDesktopUI(screenWidth, screenHeight);
+        } else {
+          // Mobile & tablet layout
+          return _buildCompactLoginUI(screenWidth, screenHeight);
+        }
+      },
+    );
+  }
+
+  Widget _buildDesktopUI(double screenWidth, double screenHeight) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(248, 248, 248, 1),
-      body: Stack(
-        children: [
-          // Background image section
-          Positioned(
-            top: screenHeight * 0.05,
-            left: screenWidth * 0.05,
-            child: Container(
-              height: screenHeight * 0.90,
-              width: screenWidth * 0.4,
-              child: Stack(
+      backgroundColor: const Color.fromRGBO(248, 248, 248, 1),
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * .1,
+          vertical: screenHeight * .055,
+        ),
+        child: Row(
+          children: [
+            // Left section with avatar and logo
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/avathar_backround.png", fit: BoxFit.cover),
-                  Positioned(
-                    top: screenHeight * 0.07,
-                    left: screenWidth * 0.09,
-                    child: Container(
-                      height: screenHeight * 0.22,
-                      width: screenWidth * 0.18,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white,
-                      ),
-                      child: Stack(
-                        children: [
-                          Image.asset("assets/logo.png"),
-                          Positioned(
-                            top: screenHeight * 0.17,
-                            left: screenWidth * 0.04,
-                            child: const Text(
-                              "SWIFT",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                                color: Color.fromARGB(255, 27, 131, 31),
-                              ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.asset(
+                            "assets/icon/avathar_backround.png",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            margin: EdgeInsets.only(top: screenHeight * 0.07),
+                            height: screenHeight * 0.22,
+                            width: screenWidth * 0.18,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.white,
+                            ),
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Image.asset("assets/icon/logo.png")),
+                                Positioned(
+                                  bottom: 12,
+                                  left: 60,
+                                  child: Row(
+                                    children: const [
+                                      Text(
+                                        "SWIFT",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                          color: Color.fromARGB(255, 27, 131, 31),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "CLEAN",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Positioned(
-                            top: screenHeight * 0.17,
-                            left: screenWidth * 0.09,
-                            child: const Text(
-                              "CLEAN",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                                color: Colors.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                           child: Image.asset("assets/icon/cleaning_avathar.png",scale: 1.6,),
+                           )
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          
-          // Right-side form box
-          Positioned(
-            top: screenHeight * 0.05,
-            left: screenWidth * 0.40,
-            child: Container(
-              height: screenHeight * 0.90,
-              width: screenWidth * 0.54,
-              decoration: BoxDecoration(
 
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: screenHeight * 0.15,
-                    left: screenWidth * 0.18,
-                    child: const Text(
-                      "Welcome Back!",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+            // Right section with login form
+            Expanded(
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 60),
+                  height: screenHeight,
+                  decoration: BoxDecoration(
+                    boxShadow: const [BoxShadow(blurRadius: 1.5, color: Colors.grey)],
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
                     ),
                   ),
-          
-                  // Email input
-                  Positioned(
-                    top: screenHeight * 0.33,
-                    left: screenWidth * 0.14,
-                    child: SizedBox(
-                      width: screenWidth * 0.25,
-                      child: Material(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Welcome Back!",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+
+                      // Email field
+                      Material(
                         elevation: 4,
                         borderRadius: BorderRadius.circular(20),
                         child: TextFormField(
+                          readOnly: true,
+                          initialValue: adminEmail,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
                             hintText: " Email",
                             enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Color.fromARGB(255, 202, 202, 202)),
+                              borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 202, 202, 202),
+                              ),
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-          
-                  // password input
-                  Positioned(
-                    top: screenHeight * 0.42,
-                    left: screenWidth * 0.14,
-                    child: SizedBox(
-                      width: screenWidth * 0.25,
-                      child: Material(
+                      const SizedBox(height: 20),
+
+                      // Password field
+                      Material(
                         elevation: 4,
                         borderRadius: BorderRadius.circular(20),
                         child: TextFormField(
+                          controller: passController,
+                          obscureText: _isObscureCurrent,
                           decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                           icon: Icon(
+                          _isObscureCurrent ? Icons.visibility_off : Icons.visibility,
+                         ),
+                          onPressed: () {
+                           setState(() {
+                             _isObscureCurrent = !_isObscureCurrent;
+                               });
+                              },
+                            ),
                             fillColor: Colors.white,
                             filled: true,
                             hintText: " Password",
                             enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Color.fromARGB(255, 202, 202, 202)),
+                              borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 202, 202, 202),
+                              ),
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10),
+
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            "Forget Password",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 24, 128, 27),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Login button
+                      Material(
+                        elevation: 4,
+                        borderRadius: BorderRadius.circular(15),
+                        child: InkWell(
+                          onTap: _handleLogin,
+                          child: Container(
+                            height: 46,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: const Color.fromARGB(255, 24, 128, 27),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCompactLoginUI(double screenWidth, double screenHeight) {
+    return Scaffold(
+      backgroundColor: const Color.fromRGBO(248, 248, 248, 1),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 4)],
+              ),
+              width: screenWidth * 0.9,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Welcome Back!",
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    readOnly: true,
+                    initialValue: adminEmail,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Email",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
-                  
-                  Positioned(
-                    top: screenHeight * 0.49,
-                    left: screenWidth * 0.29,
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: passController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {  }, 
-                      child: Text("Forget Password",
-                    style: TextStyle(fontSize: 18,
-                    color: const Color.fromARGB(255, 24, 128, 27),
-                    fontWeight: FontWeight.bold)),),
-                  ),
-                  // Login Button
-                  Positioned(
-                    top: screenHeight * 0.55,
-                    left: screenWidth * 0.14,
-                    child: Material(
-                      elevation: 4,
-                      borderRadius: BorderRadius.circular(15),
-                      child: InkWell(
-                        onTap: (){
-          
-                        },
-                        child: Container(
-                          height: 46,
-                          width: screenWidth * 0.25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color.fromARGB(255, 24, 128, 27),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Login Now",
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-          
-                  // sign in
-                  Positioned(
-                    top: screenHeight * 0.64,
-                    left: screenWidth * 0.14,
-                    child: Material(
-                      elevation: 4,
-                      borderRadius: BorderRadius.circular(15),
-                      child: GestureDetector(
-                        onTap: (){
-          
-                        },
-                        child: Container(
-                          height: 46,
-                          width: screenWidth * 0.25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 100),
-                              child: Row(
-                                children: [
-                                  Image.asset("assets/google_logo.png",scale: 14,),
-                                  SizedBox(width: 10,),
-                                  const Text(
-                                    "Login with Google",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                // sign up button
-                 Positioned(
-                  top: screenHeight * 0.72,
-                  left: screenWidth * 0.18,
-                   child: Row(
-                     children: [
-                      Text("Don't have an account?",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16),),
-                      TextButton(
-                        onPressed: (){
-                                  
-                         },
-                        child: Text("Sign Up Now",
+                      onPressed: () {},
+                      child: const Text(
+                        "Forget Password?",
                         style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          fontSize: 18,
+                          color: Color.fromARGB(255, 24, 128, 27),
                           fontWeight: FontWeight.bold,
-                          color: Colors.black),)),
-                       ],
-                     ),
-                 ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: _handleLogin,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 24, 128, 27),
+                      minimumSize: const Size.fromHeight(50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: isLoading == true
+                                  ? Center(child: CircularProgressIndicator(color: Colors.white))
+                                  : const Text(
+                      "Login",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-
-          // Cleaning image
-          Positioned(
-            top: screenHeight * 0.50,
-            left: screenWidth * 0.15,
-            child: Image.asset(
-              "assets/cleaning_avathar.png",
-              scale: 1.4,
-            ),
-          ),
-        ],
+        ),
       ),
     );
+  }
+
+ void _handleLogin() async {
+   setState(() {
+      isLoading = true;
+    });
+
+    try {    
+      final currentUser = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: adminEmail.toString(),
+        password: passController.text.trim(),
+      );
+
+      if (currentUser.user != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+              mobileScaffold: MobileScaffold(),
+              tabletScaffold: TabletScaffold(),
+              desktopScaffold: DesktopScaffold(),
+            ),
+          ),
+          (route) => false,
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      _showError(e.message ?? "Authentication failed.");
+    } catch (e) {
+      _showError("Something went wrong. Please try again.");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 }

@@ -9,7 +9,8 @@ version: 1.0.0+1
 
 # Environment SDK version
 environment:
-  sdk: ^3.5.3
+  # sdk: ^3.5.3
+  sdk: ^3.7.2
 
 # Project dependencies
 dependencies:
@@ -37,6 +38,12 @@ dependencies:
   standard_searchbar: ^2.1.1
   fl_chart: ^0.71.0
   syncfusion_flutter_charts: ^29.1.38
+  flutter_bloc: ^9.1.1
+  firebase_auth: ^5.5.4
+  firebase_core: ^3.13.1
+  cloud_firestore: ^5.6.8
+  flutter_rating_stars: ^1.1.0
+  file_picker: ^10.1.9
 
 dev_dependencies:
   flutter_test:
