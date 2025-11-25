@@ -83,7 +83,7 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
       case "Payments":
         return  PaymentPage();
       case "Bookings":
-        return const Bookings();
+        return  Bookings();
       case "Loyalty Points":
         return Loyaltypoints();
       case "Notifications":
